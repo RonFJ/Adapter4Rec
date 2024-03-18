@@ -1,6 +1,18 @@
-# Adapter4Rec
+# Adapter4Rec （WSDM2024）
 
-This repository contains the source code for our WSDM2024 Paper: **''[Exploring Adapter-based Transfer Learning for Recommender Systems: Empirical Studies and Practical Insights](https://arxiv.org/pdf/2305.15036.pdf)''**. 
+This repository contains the source code for our Paper: **''[Exploring Adapter-based Transfer Learning for Recommender Systems: Empirical Studies and Practical Insights](https://arxiv.org/pdf/2305.15036.pdf)''**.  
+
+【blog】 (1)https://zhuanlan.zhihu.com/p/684389843/ (2)https://medium.com/@lifengyi_6964/parameter-efficient-adapter-transfer-for-multi-domain-recommendation-329bf3c32a60
+
+🤗 **Resources**: four Large-scale datasets for evaluating foundation / transferable / multi-modal / LLM recommendaiton models.
+
+-  **PixelRec**: https://github.com/westlake-repl/PixelRec
+  
+-  **NineRec(TPAMI)**: https://github.com/westlake-repl/NineRec 
+
+-  **Tenrec(NeurIPS)**: https://github.com/yuangh-x/2022-NIPS-Tenrec
+  
+-  **MicroLens(DeepMind Talk)**: https://github.com/westlake-repl/MicroLens
 
 
 ![](Fig/Adapter4Rec.jpg) 
@@ -25,7 +37,16 @@ To this end, we perform  empirical studies  to address several key sub-questions
 
 ## Preparation
 
-The complete textual recommendation dataset (MIND & Adressa) is available under the Dataset directory. In terms of the datasets with images (HM, Amazon, Bili etc.), we will release the raw images of them upon acceptence along with the pretrained checkpoints.
+The complete textual recommendation dataset (MIND & Adressa) is available under the Dataset directory. 
+
+Download the image files:
+
+"hm_images.zip" for HM dataset from this [link](https://drive.google.com/file/d/1zm0V3th-_ZxAevQM5yt8tkbLHnXGc6lk/view?usp=drive_link)
+
+"am_image.zip" for Amazon Clothes&Shoes dataset from this [link](https://drive.google.com/file/d/1r8UJKFfhx_p93Q5DGOXDvXPq6PQYD_Iz/view?usp=drive_link)
+
+Then put them under Dataset/HM and Dataset/Amazon, respectively. Finally, please use the "build_lmdb_hm.py" scripts from [IDvs.MoRec](https://github.com/westlake-repl/IDvs.MoRec/tree/main/dataset/HM) to generate the LMDB file.
+
 
 ### Pre-trained Model Download
 
@@ -38,6 +59,12 @@ We report details of the pre-trained Item ME we used in Table. Download the pyto
 | ViT<sub>base</sub>     | 86M     | https://huggingface.co/google/vit-base-patch16-224 |
 | MAE<sub>base</sub>     | 86M     | https://huggingface.co/facebook/vit-mae-base       |
 
+We provide the following checkpoints pre-trained on the source datasets:
+
+[SASRec+BERT](https://drive.google.com/file/d/16xIo2ygB4b3ERrg81zDzBXXUfdLw86Ss/view?usp=drive_link), [CPC+BERT](https://drive.google.com/file/d/1lqjH8z4Ta_jnxWTYdilL338OoYGPF9wW/view?usp=drive_link), [SASRec+ViT](https://drive.google.com/file/d/1aaWa6CK0an6RxPGFDOnDQXYgnkJd5HGP/view?usp=drive_link), and [CPC+ViT](https://drive.google.com/file/d/1YTKzg1ZgFrxAvM6xhCZnG49jeHCLSHIG/view?usp=drive_link)
+
+The SASRec/CPC+BERT pretrained checkpoint should be placed under Downstream/Text/pretrained_models and SASRec/CPC+ViT under Downstream/CV/pretrained_models.
+
 ## Training
 
 An example of Source:
@@ -48,7 +75,7 @@ cd Pretraining/Text/script
 python sm_base_sasrec.py
 ```
 
-We select the checkpoint with the best validation result as the pretrained checkpoint for the downstream tasks.
+We select the checkpoint with the best validation result as the pre-trained checkpoint for the downstream tasks. Please note that the pretraining process may take a considerable amount of time. Our pre-trained image recommendation model was trained on the source domain using four A40 GPUs for approximately 3 to 4 days.
 
 
 
@@ -60,6 +87,6 @@ cd Downstream/Text/script
 python adapter_houlsby.py
 ```
 
-We report the test results of the checkpoint with the best validation result.
+We report the test results of the checkpoint with the best validation result. 
 
 
